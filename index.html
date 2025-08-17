@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Bitácora</title>
+    <!-- Incluye el CDN de Tailwind CSS para un diseño moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluye la biblioteca html2pdf para la funcionalidad de descarga en PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* Define un estilo de fuente para toda la página */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5dc; /* Un color de fondo suave (Beige) */
+        }
+        /* Estilos para los campos de texto, mejorando la estética */
+        textarea {
+            resize: none; /* Evita que el usuario cambie el tamaño del textarea */
+            transition: all 0.3s ease-in-out; /* Animación suave en el foco */
+        }
+        textarea:focus {
+            box-shadow: 0 0 0 3px rgba(10, 186, 181, 0.45); /* Sombra de foco del color principal */
+            border-color: #0abab5; /* Color de borde del color principal */
+        }
+        /* Añade un estilo para las cajas de las preguntas */
+        .question-box {
+            background-color: #ffffff; /* Fondo blanco para las cajas */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            border-left: 5px solid; /* Borde de color en el lado izquierdo */
+        }
+        /* Colores para cada sección basados en la paleta de marca */
+        .box-primary { border-color: #0abab5; } /* Azul verdoso vibrante */
+        .box-secondary { border-color: #008080; } /* Verde azulado oscuro */
+        .box-accent { border-color: #800020; } /* Vino tinto profundo */
+
+        /* Estilos para el texto del título y subtítulos */
+        .title {
+            color: #800020; /* Color vino tinto para el título principal */
+        }
+        .subtitle {
+            color: #008080; /* Color verde azulado oscuro para subtítulos */
+        }
+
+        /* Oculta los botones cuando se va a imprimir o descargar el PDF */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Contenedor principal para el contenido que se va a imprimir, ahora con el espaciado -->
+    <div id="content-to-print" class="max-w-4xl mx-auto space-y-8 flex-grow p-4 sm:p-8">
+        <!-- Encabezado con logo y título -->
+        <div class="text-center space-y-2">
+            <!-- Cuenta de Instagram, ahora con un enlace funcional -->
+            <p class="text-sm text-gray-500 flex items-center justify-center space-x-1">
+                <!-- Se ha agregado una etiqueta <a> para hacer el texto clickable. -->
+                <a href="https://www.instagram.com/rosita_facilitadoraemocional" target="_blank" class="text-teal-600 hover:text-teal-800 transition duration-300">
+                    <strong class="text-black hover:underline">@rosita_facilitadoraemocional</strong>
+                </a>
+            </p>
+            <h1 class="text-4xl sm:text-5xl font-extrabold title">
+                Tu Bitácora: El Detective Emocional
+            </h1>
+            <p class="text-xl sm:text-2xl font-light subtitle">
+                3 Preguntas para la Claridad
+            </p>
+        </div>
+
+        <!-- Introducción de la guía -->
+        <div class="text-center text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p>Hola,</p>
+            <p class="mt-2">A veces, la clave para resolver un problema no es pensar más, sino pensar diferente. La escritura es una de las herramientas más poderosas que existen para tomar distancia y obtener una visión más clara.</p>
+            <p class="mt-4">Esta guía de 10 minutos está diseñada para ayudarte a hacer precisamente eso: <strong>tomar distancia para encontrar claridad</strong>. Solo necesitas un cuaderno, o usar los espacios a continuación.</p>
+        </div>
+
+        <!-- Bloque de preguntas principales -->
+        <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-center subtitle">El Ejercicio de las 3 Preguntas</h2>
+
+            <!-- Pregunta 1 -->
+            <div class="p-6 rounded-lg question-box box-primary">
+                <h3 class="text-xl font-semibold mb-2" style="color: #0abab5;">1. El Periodista Neutral</h3>
+                <p class="text-gray-700 mb-4">Describe la situación que te preocupa como si fueras un periodista que solo informa los hechos. Sin emociones, sin juicios, sin "creo que..." o "siento que...". Escribe de manera objetiva los datos duros.</p>
+                <textarea id="q1" class="w-full p-3 border-2 border-gray-300 rounded-md h-32 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="p-6 rounded-lg question-box box-secondary">
+                <h3 class="text-xl font-semibold mb-2" style="color: #008080;">2. El Mejor Amigo Sabio</h3>
+                <p class="text-gray-700 mb-4">Ahora, imagina que tu mejor amigo(a) está pasando exactamente por lo mismo. Escríbele una carta dándole el mejor consejo que se te ocurra. ¿Qué le dirías? ¿Qué pasos concretos le sugerirías?</p>
+                <textarea id="q2" class="w-full p-3 border-2 border-gray-300 rounded-md h-32 focus:outline-none"></textarea>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="p-6 rounded-lg question-box box-primary">
+                <h3 class="text-xl font-semibold mb-2" style="color: #0abab5;">3. El Primer Paso</h3>
+                <p class="text-gray-700 mb-4">Después de leer tus propias respuestas a las preguntas 1 y 2, ¿cuál es la única acción, por pequeña que sea, que puedes tomar hoy para moverte hacia adelante? Escríbela y haz un compromiso contigo mismo(a).</p>
+                <textarea id="q3" class="w-full p-3 border-2 border-gray-300 rounded-md h-32 focus:outline-none"></textarea>
+            </div>
+        </div>
+
+        <!-- *** SALTO DE PÁGINA ESTRATÉGICO *** -->
+        <!-- Este div invisible fuerza un salto de página en el PDF para evitar el desbordamiento -->
+        <div class="html2pdf__page-break"></div>
+
+        <!-- Bloque extra de PNL -->
+        <div class="space-y-6">
+            <h2 class="text-2xl font-bold text-center subtitle">Extra: Re-encuadre de Pensamientos (PNL)</h2>
+            <div class="p-6 rounded-lg question-box box-accent">
+                <p class="text-gray-700 mb-4">La <strong>Programación Neurolingüística (PNL)</strong> es una técnica poderosa que te permite reprogramar la forma en que piensas. Si un pensamiento limitante te está deteniendo, la PNL te da las herramientas para transformarlo en una creencia que te impulse a la acción.</p>
+
+                <h3 class="text-xl font-semibold mb-2" style="color: #800020;">1. Identifica el Pensamiento Limitante</h3>
+                <p class="text-gray-700 mb-4">Escribe la frase exacta que te dices a ti mismo(a) y que te detiene. Por ejemplo: "No soy lo suficientemente bueno(a)" o "Nunca voy a lograrlo".</p>
+                <textarea id="pnl1" class="w-full p-3 border-2 border-gray-300 rounded-md h-32 focus:outline-none"></textarea>
+
+                <h3 class="text-xl font-semibold mb-2" style="color: #800020;">2. El Re-encuadre Positivo</h3>
+                <p class="text-gray-700 mb-4">Ahora, reescribe esa misma frase en una versión que sea <strong>positiva, empoderadora y realista</strong>. <br>
+                <br>
+                <strong>¿Por qué es importante cómo lo escribes?</strong> Para que este nuevo pensamiento sea creíble para tu mente, es crucial que lo escribas como un proceso en el que ya estás trabajando. Usa frases como <strong>"Estoy aprendiendo a..."</strong> o <strong>"Estoy en el proceso de..."</strong>. Esto funciona porque tu cerebro reconoce que el cambio es un proceso, no un estado inmediato. Decir "Soy suficiente" puede sonar a una mentira si aún no lo sientes, pero decir "Estoy aprendiendo a sentirme suficiente" es una verdad que tu mente puede aceptar y anclar.</p>
+                <textarea id="pnl2" class="w-full p-3 border-2 border-gray-300 rounded-md h-32 focus:outline-none"></textarea>
+                
+                <p class="text-sm text-gray-500 mt-4"><strong>Nota:</strong> Para que este re-encuadre se convierta en una creencia sólida, debes repetirlo varias veces al día. La repetición es la clave para anclar este nuevo pensamiento en tu mente.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de botones para descargar/imprimir -->
+    <div class="no-print mt-8 text-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <p class="text-gray-700 text-lg">Puedes completar este workbook directamente aquí en tu dispositivo. ¡Tus respuestas se guardarán automáticamente! Si deseas una copia, puedes obtenerla.</p>
+        <button onclick="window.print()" class="px-6 py-3 bg-teal-500 text-white font-bold rounded-lg shadow-lg hover:bg-teal-600 transition duration-300">
+            IMPRIMIR/DESCARGAR PDF
+        </button>
+    </div>
+
+    <!-- Nuevo CTA -->
+    <div class="max-w-4xl mx-auto mt-8 text-center p-6 border-2 border-dashed border-cyan-700 rounded-lg bg-gray-50">
+        <p class="text-lg font-semibold text-cyan-700">
+            ✨ ¿Quieres ir más profundo?
+        </p>
+        <p class="mt-2 text-gray-800">
+            Descubre el Kit de Exploración Emocional: 6 ejercicios prácticos diseñados para guiarte paso a paso en tu propio proceso de claridad y bienestar.
+        </p>
+    </div>
+
+    <!-- Pie de página -->
+    <footer class="mt-8 p-4 text-center text-gray-600 border-t border-gray-300 bg-white">
+        <p class="text-sm flex items-center justify-center space-x-2">
+            Sígueme en Instagram: 
+            <strong class="text-black">@rosita_facilitadoraemocional</strong>
+        </p>
+    </footer>
+
+    <script>
+        // Array de los IDs de los textareas para un manejo más sencillo
+        const textareas = ['q1', 'q2', 'q3', 'pnl1', 'pnl2'];
+        
+        // Función para guardar los datos en el almacenamiento local
+        function saveAnswers() {
+            const data = {};
+            textareas.forEach(id => {
+                data[id] = document.getElementById(id).value;
+            });
+            localStorage.setItem('guiaRespuestas', JSON.stringify(data));
+            console.log("Respuestas guardadas automáticamente.");
+        }
+
+        // Función para cargar los datos del almacenamiento local
+        function loadAnswers() {
+            const savedData = localStorage.getItem('guiaRespuestas');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                textareas.forEach(id => {
+                    if (data[id] !== undefined) {
+                        document.getElementById(id).value = data[id];
+                    }
+                });
+                console.log("Respuestas cargadas exitosamente.");
+            }
+        }
+
+        // Llama a la función para cargar las respuestas al inicio
+        window.onload = function() {
+            loadAnswers();
+        }
+
+        // Asocia el evento 'input' a cada textarea para guardar automáticamente
+        textareas.forEach(id => {
+            const textarea = document.getElementById(id);
+            if (textarea) {
+                textarea.addEventListener('input', saveAnswers);
+            }
+        });
+    </script>
+</body>
+</html>
